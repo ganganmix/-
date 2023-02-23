@@ -1,0 +1,10 @@
+<!--pages/login/login.wxml-->
+<view class="container">
+<view>
+  <image></image>
+  <text>img</text>
+</view>
+  <view catchtap="bindViewTap">
+  <button>按钮</button>
+  </view>
+</view>

@@ -1,0 +1,4 @@
+/* pages/login/login.wxss */
+page{
+  background-color: hsl(203, 92%, 75%, 0.3);
+}

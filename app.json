@@ -1,0 +1,36 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/login/login",
+    "pages/logging/logging"
+  ],
+  "window":{
+    "backgroundTextStyle":"dark",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "ganganmix图库",
+    "navigationBarTextStyle":"white", 
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#8ffcfc80"
+  },
+  "tabBar": {
+    "color": "#000",
+    "selectedColor": "#109fef",
+    "borderStyle": "black",
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页",
+      "iconPath": "icon/首页.png",
+      "selectedIconPath": "icon/主页.png"
+    },
+    {
+      "pagePath": "pages/login/login",
+      "text": "联系俺",
+      "iconPath": "icon/质控1.png",
+      "selectedIconPath": "icon/质控.png"
+
+    }
+  ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
