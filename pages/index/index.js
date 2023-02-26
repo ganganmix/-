@@ -15,52 +15,80 @@ Page({
     
     ],
     img_ls:[],
-  bdstyle:{},
+    bdstyle:{},
   ipv:'',
-  URL:'https://pic.sogou.com/napi/pc/searchList?mode=1&start=96&xml_len=48&query=明日方舟'
+  URL:'https://pic.sogou.com/napi/pc/searchList?mode=1&start=96&xml_len=24&query=明日方舟'
 },
   inputdata(e){
     this.setData({
       ipv:e.detail.value,
     });
   },
-  but:function(){
-    this.setData({
-      URL:"https://pic.sogou.com/napi/pc/searchList?mode=1&start=96&xml_len=48&query="+this.data.ipv,
-    });
-    this.req(this.data.URL);
+  // 按键点击事件
+  async but(){
+    var url = "https://pic.sogou.com/napi/pc/searchList?mode=1&start=96&xml_len=48&query="+this.data.ipv;
+    this.requ(url).then(res=>{
+      this.play(res).then(rec=>{
+        this.setData({
+          img_ls:res,
+          bdstyle:rec,
+          URL:url
+        })
+      })
+    })
   },
 
-  req:function(URL){
-    var img_ls=[];
-    var bdstyle={};
-    wx.request({
-      url: URL,
-      success:(res)=>{
-        let c = 0;
-        for(const i of res.data.data.items){
-          img_ls.push({"id":c,"imgurl":i.thumbUrl})
-          c++;
-          var calssname='body_'+c
-      bdstyle[calssname]='width:48vw;border: 10rpx solid hsl(203, 92%, 75%, 0.5);background-color:rgba(0, 89, 255, 0.3);';
-        }
-      this.setData({
-        img_ls:img_ls,
-        bdstyle:bdstyle
-      });
-    },
-  });
+  // request函数
+  async requ(URL){
+      const c = await new Promise((resoile)=>{wx.request({
+        url: URL,
+        method:"GET",
+        success:({data:res})=>{
+          var l = 0;
+          var c = [];
+          for(const i of res.data.items){
+            c.push({"id":l, "url":i.thumbUrl})
+            l++
+          }
+          resoile(c);
+        },
+        fail:(res)=>{
+          wx.showModal({
+            title: 'error',
+            content: "requ错误"
+          })
+        },
+    })})
+    return c
 },
+
+  async play(url_ls){
+    var bdstyle = {};
+    for(const i of url_ls){
+      var classname="body_"+i.id
+      bdstyle[classname]='width:48vw;border: 10rpx solid hsl(203, 92%, 75%, 0.5);background-color:rgba(0, 89, 255, 0.3);';
+    }
+    return bdstyle
+  },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {this.req(this.data.URL)},
+  onLoad(options) {
+
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-
+    this.requ(this.data.URL).then(res=>{
+      this.play(res).then(rec=>{
+        this.setData({
+          img_ls:res,
+          bdstyle:rec
+        })
+      })
+    })
   },
 
   /**
@@ -95,7 +123,22 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
+    var re_url = this.data.URL
+    var mode = re_url.slice(41, 46)
+    var re_mode = mode+Number(re_url[46])
+    var ne_mode = mode+[Number(re_url[46])+1]
+    var ne_url = re_url.replace(re_mode, ne_mode)
+    this.requ(ne_url).then(res =>{
+      var img_ls = this.data.img_ls.concat(res)
+      this.play(res).then(rec=>{
+        var bdstyle = {...this.data.bdstyle, ...rec}
+        this.setData({
+          URL:ne_url,
+          bdstyle:bdstyle,
+          img_ls:img_ls
+        })
+      })
+    })
   },
 
   /**

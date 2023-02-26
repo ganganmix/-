@@ -15,7 +15,7 @@
 <view class="body">
 <block wx:for="{{img_ls}}" wx:key="id_1">
   <view class="{{'body_'+item.id}}">
-    <image id="{{item.id}}" src="{{item.imgurl}}" mode="widthFix" style="{{bdstyle['body_'+item.id]}}"/>
+    <image id="{{item.id}}" src="{{item.url}}" mode="widthFix" style="{{bdstyle['body_'+item.id]}}"/>
   </view>
 </block>
 </view>
